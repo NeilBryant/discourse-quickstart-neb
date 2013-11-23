@@ -9,6 +9,8 @@ export RBENV_ROOT="${OPENSHIFT_DATA_DIR}.rbenv"
 export RBENV_INIT="${OPENSHIFT_DATA_DIR}.bash_profile_ext"
 export RUBY_VERSION="2.0.0-p0"
 
+export TMOUT=3600
+
 if [ ! -d "${RBENV_ROOT}" ] ; then
 
     curl https://raw.github.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash
@@ -44,9 +46,16 @@ alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
     # Call it with just:
     # > $rinit
 
+    tmux new-session -d -s install "rbenv install $RUBY_VERSION && rbenv global $RUBY_VERSION && tmux display-message -t monitor 'Ruby installed'"
+    # Haven't got this to work, yet.
+    #tmux set-option -t install display-time 100000
+    tmux setw -g monitor-activity on
+    tmux set -g visual-activity on
+    tmux new-session -s monitor
 
-    rbenv install $RUBY_VERSION
-    rbenv global $RUBY_VERSION
 
-    gem install bundler
+    # rbenv install $RUBY_VERSION
+    # rbenv global $RUBY_VERSION
+
+    # gem install bundler
 fi

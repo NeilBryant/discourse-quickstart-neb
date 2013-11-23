@@ -23,13 +23,28 @@ rhc app create $appname diy-0.1 -l "$un" -p "$openshiftpwd" || exit 1 | tee ~/op
 
 rhc cartridge add postgresql-9.2 -a $appname | tee -a ~/openshiftappbuild.txt
 rhc add-cartridge http://cartreflect-claytondev.rhcloud.com/reflect?github=smarterclayton/openshift-redis-cart -a $appname | tee -a ~/openshiftappbuild.txt
-
 ```
 
+then
+
+```
+cd discourse
+
+git remote add upstream -m master git@github.com:NeilBryant/discourse-quickstart-neb.git
+$ git pull -s recursive -X theirs upstream master
+```
+
+Before deployment update config/environments/production.rb.openshift with valid SMTP credentials.
+
+Now deploy it to the Openshift
+
+```
+$ git push
+```
 ### 02. Login to the Gear
 
 ```bash
-% RHC ssh -a  discourse
+% rhc ssh -a  discourse
 ```
 
 ### 03. Gear --> Install rbenv

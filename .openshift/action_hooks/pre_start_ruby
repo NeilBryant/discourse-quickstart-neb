@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -x
+
+#Tweak to tame Ruby GC
+export RUBY_GC_MALLOC_LIMIT=90000000
+
+pushd ${OPENSHIFT_REPO_DIR} > /dev/null
+
+echo "Starting sidekiq..."
+bundle exec "sidekiq -d -e production -P '${OPENSHIFT_DATA_DIR}sidekiq.pid' -L '${OPENSHIFT_DATA_DIR}sidekiq.log'"
+
+popd

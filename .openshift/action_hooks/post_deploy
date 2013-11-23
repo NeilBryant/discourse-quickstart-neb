@@ -1,0 +1,20 @@
+#!/bin/bash
+# This is a simple post deploy hook executed after your application
+# is deployed and started.  This script gets executed directly, so
+# it could be python, php, ruby, etc.
+
+set -x
+
+if [ -z $OPENSHIFT_POSTGRESQL_DB_HOST ]; then
+    echo 1>&2
+    echo "Could not find postgresql database. Please run:" 1>&2
+    echo "rhc cartridge add postgresql-9.2 -a $OPENSHIFT_APP_NAME" 1>&2
+    echo "then make a sample commit (add whitespace somewhere) and re-push" 1>&2
+    echo 1>&2
+    exit 5
+fi
+
+# Run db:migrate
+pushd ${OPENSHIFT_REPO_DIR} > /dev/null
+bundle exec "env RAILS_ENV='production' rake db:migrate"
+popd > /dev/null

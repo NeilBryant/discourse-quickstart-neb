@@ -1,0 +1,31 @@
+defaults: &defaults
+  adapter: postgresql
+  database: <%= ENV['OPENSHIFT_APP_NAME'] %>
+  username: <%= ENV['OPENSHIFT_POSTGRESQL_DB_USERNAME'] %>
+  password: <%= ENV['OPENSHIFT_POSTGRESQL_DB_PASSWORD'] %>
+  host: <%= ENV['OPENSHIFT_POSTGRESQL_DB_HOST'] %>
+  port: <%= ENV['OPENSHIFT_POSTGRESQL_DB_PORT'] %>
+  pool: 5 	# size of DB connection pool *per process*
+  timeout: 5000
+  # db_id: 0	# database ID if hosting multiple sites
+  #host_names:
+  #  ### If you change this setting you will need to
+  #  ###   - restart sidekiq if you change this setting
+  #  ###   - rebake all to posts using: `RAILS_ENV=production bundle exec rake posts:rebake`
+  #  - production.localhost # Update this to be the domain of your production site
+
+development:
+  <<: *defaults
+
+profile:
+  <<: *defaults
+
+test:
+  <<: *defaults
+  db: 1
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

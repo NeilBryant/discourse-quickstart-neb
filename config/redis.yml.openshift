@@ -1,0 +1,23 @@
+defaults: &defaults
+  uri: redis://<%= ENV['OPENSHIFT_REDIS_HOST'] || ENV['OPENSHIFT_REDIS_DB_HOST'] %>:<%= ENV['OPENSHIFT_REDIS_PORT'] || ENV['OPENSHIFT_REDIS_DB_PORT']%>
+  host: <%= ENV['OPENSHIFT_REDIS_HOST'] || ENV['OPENSHIFT_REDIS_DB_HOST'] %>
+  port: <%= ENV['OPENSHIFT_REDIS_PORT'] || ENV['OPENSHIFT_REDIS_DB_PORT']%>
+  password: <%= ENV['REDIS_PASSWORD'] || ENV['OPENSHIFT_REDIS_DB_PASSWORD']%>
+  db: 0
+  cache_db: 2
+
+development:
+  <<: *defaults
+
+profile:
+  <<: *defaults
+
+test:
+  <<: *defaults
+  db: 1
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

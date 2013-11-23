@@ -1,0 +1,14 @@
+#!/bin/bash
+# This is a simple script and will be executed on your CI system if
+# available.  Otherwise it will execute while your application is stopped
+# before the build step.  This script gets executed directly, so it
+# could be python, php, ruby, etc.
+
+set -e
+
+pushd "$OPENSHIFT_REPO_DIR" > /dev/null
+echo "Create config files..."
+cp config/redis.yml.openshift config/redis.yml
+cp config/database.yml.openshift config/database.yml
+cp config/environments/production.rb.openshift config/environments/production.rb
+popd > /dev/null

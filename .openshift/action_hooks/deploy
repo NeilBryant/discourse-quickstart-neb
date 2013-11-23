@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -x
+
+pushd ${OPENSHIFT_REPO_DIR} > /dev/null
+SIDEKIQ_PIDFILE="${OPENSHIFT_DATA_DIR}sidekiq.pid"
+
+if [ -f "${SIDEKIQ_PIDFILE}" ]; then
+  echo "Stopping Sidekiq..."
+  SIDEKIQ_PID=$(cat $SIDEKIQ_PIDFILE)
+  # Check if Sidekiq is running. If not, just remove the PID file.
+  ps -p $SIDEKIQ_PID &> /dev/null
+  if [ "$?" == 0 ]; then
+    bundle exec "sidekiqctl stop ${SIDEKIQ_PIDFILE} 20"
+  else
+    echo "WARNING: Sidekiq is not running, removing stalled pid file..."
+    rm $SIDEKIQ_PIDFILE &> /dev/null
+  fi
+fi
+
+popd

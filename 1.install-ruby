@@ -53,7 +53,7 @@ alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
     # gem install bundler
 
     echo ========= starting ruby install ========== >  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
-    echo === ( this is coffee break territory) ==== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    echo "=== ( this is coffee break territory) ====" >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
     tmux new-session -d -s install "rbenv install $RUBY_VERSION >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; echo done. >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; killall tail"
     tail -f "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 

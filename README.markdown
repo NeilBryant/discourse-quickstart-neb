@@ -33,7 +33,7 @@ then
 cd discourse
 
 git remote add upstream -m master git@github.com:NeilBryant/discourse-quickstart-neb.git
-$ git pull -s recursive -X theirs upstream master
+git pull -s recursive -X theirs upstream master
 ```
 
 Before deployment update config/environments/production.rb.openshift with valid SMTP credentials.
@@ -47,16 +47,16 @@ scp -F tmp/vagrant-ssh-config tmp/production.rb.openshift  default:~/discourse/c
 Now deploy it to the Openshift
 
 ```
-$ git push
+git push
 ```
 ### 02. Login to the Gear
 
 ```bash
-% rhc ssh -a  discourse
+rhc ssh -a  discourse
 ```
 
 ### 03. Gear --> Install rbenv
 ```bash
-% $rinit
+$rinit
 ```
 

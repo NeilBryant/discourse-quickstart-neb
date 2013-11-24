@@ -9,7 +9,7 @@ export RBENV_ROOT="${OPENSHIFT_DATA_DIR}.rbenv"
 export RBENV_INIT="${OPENSHIFT_DATA_DIR}.bash_profile_ext"
 export RUBY_VERSION="2.0.0-p0"
 
-export TMOUT=3600
+export TMOUT=5000
 
 if [ ! -d "${RBENV_ROOT}" ] ; then
 
@@ -54,8 +54,17 @@ alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
     #tmux set -g visual-activity on
     #tmux new-session -s monitor
 
-    rbenv install $RUBY_VERSION
-    rbenv global $RUBY_VERSION
+    # rbenv install $RUBY_VERSION
+    # rbenv global $RUBY_VERSION
 
-    gem install bundler
+    # gem install bundler
+
+    tmux new-session -d -s install "rbenv install $RUBY_VERSION > rubyinstall.txt && killall tail"
+    tail -f rubyinstall.txt
+
+    echo ================== >>  rubyinstall.txt
+    rbenv global $RUBY_VERSION | tee -a rubyinstall.txt
+
+    echo ================== >>  rubyinstall.txt
+    gem install bundler | tee -a rubyinstall.txt
 fi

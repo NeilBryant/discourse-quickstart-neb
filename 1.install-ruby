@@ -59,12 +59,13 @@ alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
 
     # gem install bundler
 
+    echo ========= starting ruby install ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
     tmux new-session -d -s install "rbenv install $RUBY_VERSION > "${OPENSHIFT_DATA_DIR}"${OPENSHIFT_DATA_DIR}rubyinstall.txt"" && killall tail"
     tail -f "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 
-    echo ================== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    echo ========= setting version ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
     rbenv global $RUBY_VERSION | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 
-    echo ================== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    echo ========= starting bundler install ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
     gem install bundler | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 fi

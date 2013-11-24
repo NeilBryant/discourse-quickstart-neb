@@ -46,16 +46,16 @@ alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
     # Call it with just:
     # > $rinit
 
-    tmux new-session -d -s install "rbenv install $RUBY_VERSION && rbenv global $RUBY_VERSION && tmux display-message -t monitor 'Ruby installed'"
-    # Haven't got this to work, yet.
-    #tmux set-option -t install display-time 100000
-    tmux setw -g monitor-activity on
-    tmux set -g visual-activity on
-    tmux new-session -s monitor
+    # Moved into the pre_build hook, so shouldn't need tmux anymore.
+    #tmux new-session -d -s install "rbenv install $RUBY_VERSION && rbenv global $RUBY_VERSION && tmux display-message -t monitor 'Ruby installed'"
+    ## Haven't got this to work, yet.
+    ##tmux set-option -t install display-time 100000
+    #tmux setw -g monitor-activity on
+    #tmux set -g visual-activity on
+    #tmux new-session -s monitor
 
+    rbenv install $RUBY_VERSION
+    rbenv global $RUBY_VERSION
 
-    # rbenv install $RUBY_VERSION
-    # rbenv global $RUBY_VERSION
-
-    # gem install bundler
+    gem install bundler
 fi

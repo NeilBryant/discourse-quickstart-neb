@@ -6,6 +6,8 @@ Installer and action hooks for Discourse on Openshift. Includes scripts to insta
 
 ### 01. Build the Discourse Gear
 
+These are the contents of my 'rhccreate.bash' file:
+
 ```bash
 un=whoever
 openshiftpwd=whatever

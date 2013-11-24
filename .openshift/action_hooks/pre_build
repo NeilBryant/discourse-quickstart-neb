@@ -6,9 +6,13 @@
 
 set -e
 
+echo Starting $( basename "$0" ) action hook...
+
 pushd "$OPENSHIFT_REPO_DIR" > /dev/null
 echo "Create config files..."
 cp config/redis.yml.openshift config/redis.yml
 cp config/database.yml.openshift config/database.yml
 cp config/environments/production.rb.openshift config/environments/production.rb
 popd > /dev/null
+
+echo Ended $( basename "$0" ) action hook.

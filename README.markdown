@@ -38,6 +38,12 @@ $ git pull -s recursive -X theirs upstream master
 
 Before deployment update config/environments/production.rb.openshift with valid SMTP credentials.
 
+In mycase, I use this command from the host PC:
+
+```
+scp -F tmp/vagrant-ssh-config tmp/production.rb.openshift  default:~/discourse/config/environments/production.rb.openshift
+```
+
 Now deploy it to the Openshift
 
 ```

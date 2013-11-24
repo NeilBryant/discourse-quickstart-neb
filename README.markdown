@@ -6,6 +6,8 @@ Installer and action hooks for Discourse on Openshift. Includes scripts to insta
 
 ### 01. Build the Discourse Gear
 
+#### Create
+
 These are the contents of my 'rhccreate.bash' file:
 
 ```bash
@@ -27,7 +29,13 @@ rhc cartridge add postgresql-9.2 -a $appname | tee -a ~/openshiftappbuild.txt
 rhc add-cartridge http://cartreflect-claytondev.rhcloud.com/reflect?github=smarterclayton/openshift-redis-cart -a $appname | tee -a ~/openshiftappbuild.txt
 ```
 
-then
+Alternatively, if you've already built the Gear, you can just clone it:
+
+```bash
+rhc git-clone -a discourse
+```
+
+#### Configure
 
 ```
 cd discourse
@@ -49,15 +57,24 @@ Now deploy it to the Openshift Gear:
 ```
 git push
 ```
+
 ### 02. Login to the Gear
 
 ```bash
 rhc ssh -a  discourse
 ```
+
 Openshift doesn't have a lot in the way of modifying your environment. The script configures an environmnt variable to use as a shortcut; so to start rbenv in your new ssh session, type:
 
-``bash
+```bash
 $rinit
+```
+
+Make sure the version is correct, and install bundler:
+
+```bash
+ruby --version
+gem install bundler
 ```
 
 ### 03. More Git Work (local)
@@ -69,6 +86,7 @@ git pull -X theirs discourse master
 git fetch discourse
 
 ```
+
 Either decide on a release, or go with the latest.
 
 ```bash
@@ -77,26 +95,25 @@ or
 git checkout -b mergetemp latest-release
 git checkout master
 
-
 ```
 
-# try tag 'latest-release'
-git checkout v0.9.6.4
-# git checkout -b tempbranch v0.9.6.4
-# list tags with 'git tag -l'
-# git checkout -b mergetemp tags/v0.9.7.3
-# git checkout -b mergetemp tags/latest-release
-git checkout v0.9.6.4
-# git checkout -b tempbranch v0.9.6.4
-# list tags with 'git tag -l'
-# git checkout -b mergetemp tags/v0.9.7.3
-# git checkout -b mergetemp tags/latest-release
+- \# try tag 'latest-release'
+- git checkout v0.9.6.4
+- \# git checkout -b tempbranch v0.9.6.4
+- \# list tags with 'git tag -l'
+- \# git checkout -b mergetemp tags/v0.9.7.3
+- \# git checkout -b mergetemp tags/latest-release
+- git checkout v0.9.6.4
+- \# git checkout -b tempbranch v0.9.6.4
+- \# list tags with 'git tag -l'
+- \# git checkout -b mergetemp tags/v0.9.7.3
+- \# git checkout -b mergetemp tags/latest-release
 
-# ContinueOrExit "checkout master"
-# git checkout master
-# ContinueOrExit "checkout merge"
-# git merge tempbranch
+- \# ContinueOrExit "checkout master"
+- \# git checkout master
+- \# ContinueOrExit "checkout merge"
+- \# git merge tempbranch
 
-# ContinueOrExit "delete mergetemp"
-# # Remove mergetemp
-# git branch -d tempbranch
+- \# ContinueOrExit "delete mergetemp"
+- \# \# Remove mergetemp
+- \# git branch -d tempbranch

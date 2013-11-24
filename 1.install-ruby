@@ -17,8 +17,6 @@ if [ ! -d "${RBENV_ROOT}" ] ; then
 
     echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_DATA_DIR}.gemrc
 
-	# Keep this shell working
-	export RBENV_ROOT="${OPENSHIFT_DATA_DIR}.rbenv"
 	# Build the env-variable
 	echo -n "${OPENSHIFT_DATA_DIR}.rbenv" > ~/.env/user_vars/RBENV_ROOT
 
@@ -67,3 +65,25 @@ alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
     # echo ========= starting bundler install ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
     # gem install bundler | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 fi
+
+
+# bluepill_root   = ENV['BLUEPILL_ROOT']  || ENV["HOME"]
+    export BLUEPILL_ROOT="${OPENSHIFT_DATA_DIR}"
+    echo -n "${OPENSHIFT_DATA_DIR}" > ~/.env/user_vars/BLUEPILL_ROOT
+
+# rails_env   = ENV['RAILS_ENV']  || "production"
+    export RAILS_ENV="\#"
+    echo -n "\#" > ~/.env/user_vars/RAILS_ENV
+
+# rails_root  = ENV['RAILS_ROOT'] || "/var/rails/my_discourse"
+    export RAILS_ROOT="\#"
+    echo -n "\#" > ~/.env/user_vars/RAILS_ROOT
+
+
+# user = ENV["DISCOURSE_USER"] || ENV['USER'] || 'user_running_app'
+    export DISCOURSE_USER="${OPENSHIFT_APP_UUID}"
+    echo -n "${OPENSHIFT_APP_UUID}" > ~/.env/user_vars/DISCOURSE_USER
+
+# group = ENV["DISCOURSE_GROUP"] || ENV['GROUP'] || 'www-data'
+    export DISCOURSE_GROUP="${OPENSHIFT_APP_UUID}"
+    echo -n "${OPENSHIFT_APP_UUID}" > ~/.env/user_vars/DISCOURSE_GROUP

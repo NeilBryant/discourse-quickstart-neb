@@ -22,8 +22,11 @@ if [ ! -d "${RBENV_ROOT}" ] ; then
 	# Build the env-variable
 	echo -n "${OPENSHIFT_DATA_DIR}.rbenv" > ~/.env/user_vars/RBENV_ROOT
 
-	export CONFIGURE_OPTS="--disable-install-doc"
-	echo -n "--disable-install-doc" > ~/.env/user_vars/CONFIGURE_OPTS
+    export CONFIGURE_OPTS="--disable-install-doc"
+    echo -n "--disable-install-doc" > ~/.env/user_vars/CONFIGURE_OPTS
+
+	export RBENV_VERSION="RUBY_VERSION"
+	echo -n "RUBY_VERSION" > ~/.env/user_vars/RBENV_VERSION
 
     echo '
 export PATH="${RBENV_ROOT}/bin:${PATH}"
@@ -46,26 +49,21 @@ alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
     # Call it with just:
     # > $rinit
 
-    # Moved into the pre_build hook, so shouldn't need tmux anymore.
-    #tmux new-session -d -s install "rbenv install $RUBY_VERSION && rbenv global $RUBY_VERSION && tmux display-message -t monitor 'Ruby installed'"
-    ## Haven't got this to work, yet.
-    ##tmux set-option -t install display-time 100000
-    #tmux setw -g monitor-activity on
-    #tmux set -g visual-activity on
-    #tmux new-session -s monitor
-
     # rbenv install $RUBY_VERSION
     # rbenv global $RUBY_VERSION
 
     # gem install bundler
 
     echo ========= starting ruby install ========== >  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
-    tmux new-session -d -s install "rbenv install $RUBY_VERSION >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; killall tail"
+    echo === ( this is coffee break territory) ==== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    tmux new-session -d -s install "rbenv install $RUBY_VERSION >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; echo done. >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; killall tail"
     tail -f "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 
     echo ========= setting version ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
     rbenv global $RUBY_VERSION | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 
-    echo ========= starting bundler install ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
-    gem install bundler | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    # Duh. Can't install bundler until you've initialized renv in the shell, or it
+    # just installs it to the system folder.
+    # echo ========= starting bundler install ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    # gem install bundler | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 fi

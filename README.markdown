@@ -44,7 +44,7 @@ In mycase, I use this command from the host PC:
 scp -F tmp/vagrant-ssh-config tmp/production.rb.openshift  default:~/discourse/config/environments/production.rb.openshift
 ```
 
-Now deploy it to the Openshift
+Now deploy it to the Openshift Gear:
 
 ```
 git push
@@ -54,9 +54,49 @@ git push
 ```bash
 rhc ssh -a  discourse
 ```
+Openshift doesn't have a lot in the way of modifying your environment. The script configures an environmnt variable to use as a shortcut; so to start rbenv in your new ssh session, type:
 
-### 03. Gear --> Install rbenv
-```bash
+``bash
 $rinit
 ```
 
+### 03. More Git Work (local)
+```bash
+git commit -a -m "Added Openshift hooks."
+git remote add discourse git@github.com:discourse/discourse.git
+git pull -X theirs discourse master
+
+git fetch discourse
+
+```
+Either decide on a release, or go with the latest.
+
+```bash
+git checkout -b mergetemp v0.9.7.3
+or
+git checkout -b mergetemp latest-release
+git checkout master
+
+
+```
+
+# try tag 'latest-release'
+git checkout v0.9.6.4
+# git checkout -b tempbranch v0.9.6.4
+# list tags with 'git tag -l'
+# git checkout -b mergetemp tags/v0.9.7.3
+# git checkout -b mergetemp tags/latest-release
+git checkout v0.9.6.4
+# git checkout -b tempbranch v0.9.6.4
+# list tags with 'git tag -l'
+# git checkout -b mergetemp tags/v0.9.7.3
+# git checkout -b mergetemp tags/latest-release
+
+# ContinueOrExit "checkout master"
+# git checkout master
+# ContinueOrExit "checkout merge"
+# git merge tempbranch
+
+# ContinueOrExit "delete mergetemp"
+# # Remove mergetemp
+# git branch -d tempbranch

@@ -54,7 +54,7 @@ scp -F tmp/vagrant-ssh-config tmp/production.rb.openshift  default:~/discourse/c
 
 ```
 
-Delete the 1.* file you don't need.
+`git rm` the 1.* file you don't need.
 
 Now deploy it to the Openshift Gear:
 

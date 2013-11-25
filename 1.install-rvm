@@ -35,7 +35,7 @@ if [ ! -d "${RVM_ROOT}" ] ; then
     # Add into runtime shells
     echo "source $RVM_INIT" >> "${OPENSHIFT_REPO_DIR}/.openshift/action_hooks/pre_start"
     # Make a sort of shortcut
-    echo "source $RVM_INIT" > ~/.env/user_vars/rvminit
+    echo "source $RVM_INIT" > ~/.env/user_vars/rinit
     # Call it with just:
     # > $rinit
 

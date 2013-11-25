@@ -52,6 +52,8 @@ In mycase, I use this command from the host PC:
 scp -F tmp/vagrant-ssh-config tmp/production.rb.openshift  default:~/discourse/config/environments/production.rb.openshift
 ```
 
+Delete the 1.* file you don't need.
+
 Now deploy it to the Openshift Gear:
 
 ```
@@ -83,17 +85,17 @@ git commit -a -m "Added Openshift hooks."
 git remote add discourse git@github.com:discourse/discourse.git
 git pull -X theirs discourse master
 
-git fetch discourse
+~~git fetch discourse~~
 
 ```
 
 Either decide on a release, or go with the latest.
 
 ```bash
-git checkout -b mergetemp v0.9.7.3
+~~git checkout -b mergetemp v0.9.7.3
 or
 git checkout -b mergetemp latest-release
-git checkout master
+git checkout master~~
 
 ```
 

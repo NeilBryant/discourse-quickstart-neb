@@ -1,0 +1,7 @@
+#!/bin/bash
+
+## If we're using rbenv:
+if [ -f "${OPENSHIFT_REPO_DIR}/1.install-rbenv" ]; then
+	# kill the server through the pidfile
+	# kill `cat -- $OPENSHIFT_REPO_DIR/[appname]/tmp/pids/thin.pid`
+fi

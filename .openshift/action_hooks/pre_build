@@ -8,8 +8,18 @@ set -e
 
 echo Starting $( basename "$0" ) action hook...
 
-if [ ! -d "${OPENSHIFT_DATA_DIR}.rbenv" ]; then
-  ${OPENSHIFT_REPO_DIR}/1.install-ruby
+if [ -f "${OPENSHIFT_REPO_DIR}/1.install-rbenv" ]; then
+	if [ ! -d "${OPENSHIFT_DATA_DIR}.rbenv" ]; then
+	  echo Installing rbenv...
+	  ${OPENSHIFT_REPO_DIR}/1.install-rbenv
+	fi
+fi
+
+if [ -f "${OPENSHIFT_REPO_DIR}/1.install-rvm" ]; then
+	if [ ! -d "${OPENSHIFT_DATA_DIR}.rvm" ]; then
+	  echo Installing rvm...
+	  ${OPENSHIFT_REPO_DIR}/1.install-rvm
+	fi
 fi
 
 pushd "$OPENSHIFT_REPO_DIR" > /dev/null

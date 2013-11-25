@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -x
-
 echo Starting $( basename "$0" ) action hook...
+
+set -x
 
 #Tweak to tame Ruby GC
 export RUBY_GC_MALLOC_LIMIT=90000000
@@ -13,5 +13,7 @@ echo "Starting sidekiq..."
 bundle exec "sidekiq -d -e production -P '${OPENSHIFT_DATA_DIR}sidekiq.pid' -L '${OPENSHIFT_DATA_DIR}sidekiq.log'"
 
 popd
+
+set +x
 
 echo Ended $( basename "$0" ) action hook.

@@ -1,0 +1,90 @@
+#!/bin/bash
+
+# Based (almost entirely) on:
+# https://github.com/subosito/openshift-ruby/blob/master/bin/ruby-installer.sh
+# step 1: http://randomtype.ca/blog/installing-rbenv-outside-the-home-directory/
+# modified via: https://github.com/sstephenson/ruby-build
+
+export RBENV_ROOT="${OPENSHIFT_DATA_DIR}.rbenv"
+export RBENV_INIT="${OPENSHIFT_DATA_DIR}.bash_profile_ext"
+export RUBY_VERSION="2.0.0-p0"
+
+export TMOUT=5000
+
+if [ ! -d "${RBENV_ROOT}" ] ; then
+
+    curl https://raw.github.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash
+
+    echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_DATA_DIR}.gemrc
+
+	# Build the env-variable
+	echo -n "${OPENSHIFT_DATA_DIR}.rbenv" > ~/.env/user_vars/RBENV_ROOT
+
+    export CONFIGURE_OPTS="--disable-install-doc"
+    echo -n "--disable-install-doc" > ~/.env/user_vars/CONFIGURE_OPTS
+
+	export RBENV_VERSION="RUBY_VERSION"
+	echo -n "RUBY_VERSION" > ~/.env/user_vars/RBENV_VERSION
+
+    echo '
+export PATH="${RBENV_ROOT}/bin:${PATH}"
+eval "$(rbenv init -)"
+
+alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
+    ' > $RBENV_INIT
+
+    # These probably arent both necessary, but...
+    # We'll see if we need them at all with 'rbenv global..'
+    # echo ${RUBY_VERSION} > ${OPENSHIFT_REPO_DIR}.ruby-version
+    # echo ${RUBY_VERSION} > ${OPENSHIFT_DATA_DIR}.ruby-version
+
+    # Keep this shell working
+    source $RBENV_INIT
+    # Add into runtime shells
+    echo "source $RBENV_INIT" >> "${OPENSHIFT_REPO_DIR}/.openshift/action_hooks/pre_start"
+    # Make a sort of shortcut
+    echo "source $RBENV_INIT" > ~/.env/user_vars/rinit
+    # Call it with just:
+    # > $rinit
+
+    # rbenv install $RUBY_VERSION
+    # rbenv global $RUBY_VERSION
+
+    # gem install bundler
+
+    echo ========= starting ruby install ========== >  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    echo "=== ( this is coffee break territory) ====" >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    tmux new-session -d -s install "rbenv install -v $RUBY_VERSION >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; echo done. >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; killall tail"
+    tail -f "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+
+    echo ========= setting version ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    rbenv global $RUBY_VERSION | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+
+    echo Ruby version at $(ruby --version)
+    # Duh. Can't install bundler until you've initialized renv in the shell, or it
+    # just installs it to the system folder.
+    # echo ========= starting bundler install ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    # gem install bundler | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+fi
+
+
+# bluepill_root   = ENV['BLUEPILL_ROOT']  || ENV["HOME"]
+    export BLUEPILL_ROOT="${OPENSHIFT_DATA_DIR}"
+    echo -n "${OPENSHIFT_DATA_DIR}" > ~/.env/user_vars/BLUEPILL_ROOT
+
+# rails_env   = ENV['RAILS_ENV']  || "production"
+    export RAILS_ENV="\#"
+    echo -n "\#" > ~/.env/user_vars/RAILS_ENV
+
+# rails_root  = ENV['RAILS_ROOT'] || "/var/rails/my_discourse"
+    export RAILS_ROOT="\#"
+    echo -n "\#" > ~/.env/user_vars/RAILS_ROOT
+
+
+# user = ENV["DISCOURSE_USER"] || ENV['USER'] || 'user_running_app'
+    export DISCOURSE_USER="${OPENSHIFT_APP_UUID}"
+    echo -n "${OPENSHIFT_APP_UUID}" > ~/.env/user_vars/DISCOURSE_USER
+
+# group = ENV["DISCOURSE_GROUP"] || ENV['GROUP'] || 'www-data'
+    export DISCOURSE_GROUP="${OPENSHIFT_APP_UUID}"
+    echo -n "${OPENSHIFT_APP_UUID}" > ~/.env/user_vars/DISCOURSE_GROUP

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -x
-
 echo Starting $( basename "$0" ) action hook...
+
+set -x
 
 pushd ${OPENSHIFT_REPO_DIR} > /dev/null
 SIDEKIQ_PIDFILE="${OPENSHIFT_DATA_DIR}sidekiq.pid"
@@ -21,5 +21,7 @@ if [ -f "${SIDEKIQ_PIDFILE}" ]; then
 fi
 
 popd
+
+set +x
 
 echo Ended $( basename "$0" ) action hook.

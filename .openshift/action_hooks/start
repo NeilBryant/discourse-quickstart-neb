@@ -1,0 +1,13 @@
+#!/bin/bash
+
+## If we're using rbenv:
+if [ -f "${OPENSHIFT_REPO_DIR}/1.install-rbenv" ]; then
+	# this will spawn a sub-shell, so make sure we can use rvm
+	source $OPENSHIFT_DATA_DIR/.rvm/scripts/rvm
+
+	# make sure we're in the app-dir so we use the right gemset
+	cd $OPENSHIFT_REPO_DIR/[appname]
+
+	# start the thin server on the internal ip and port
+	# bundle exec thin start -d -a $OPENSHIFT_INTERNAL_IP -p $OPENSHIFT_INTERNAL_PORT -l $OPENSHIFT_LOG_DIR/thin.log
+fi

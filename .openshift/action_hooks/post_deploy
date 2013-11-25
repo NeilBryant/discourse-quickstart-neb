@@ -3,9 +3,20 @@
 # is deployed and started.  This script gets executed directly, so
 # it could be python, php, ruby, etc.
 
+echo Starting $( basename "$0" ) action hook...
+
 set -x
 
-echo Starting $( basename "$0" ) action hook...
+## If we're using rbenv:
+if [ -f "${OPENSHIFT_REPO_DIR}/1.install-rbenv" ]; then
+	# this will spawn a sub-shell, so make sure we can use rvm
+	source $OPENSHIFT_DATA_DIR/.rvm/scripts/rvm
+
+	# make sure our bundle is up to date
+	# cd $OPENSHIFT_REPO_DIR/[appname]
+	# bundle
+fi
+
 
 if [ -z $OPENSHIFT_POSTGRESQL_DB_HOST ]; then
     echo 1>&2
@@ -20,5 +31,7 @@ fi
 pushd ${OPENSHIFT_REPO_DIR} > /dev/null
 bundle exec "env RAILS_ENV='production' rake db:migrate"
 popd > /dev/null
+
+set +x
 
 echo Ended $( basename "$0" ) action hook.

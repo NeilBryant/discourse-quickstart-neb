@@ -1,37 +1,28 @@
 #!/bin/bash
 
 # Based (almost entirely) on:
-# https://github.com/subosito/openshift-ruby/blob/master/bin/ruby-installer.sh
-# step 1: http://randomtype.ca/blog/installing-rbenv-outside-the-home-directory/
-# modified via: https://github.com/sstephenson/ruby-build
+# http://pyramidthoughts.wordpress.com/2012/04/14/install-and-run-rvm-and-ruby-1-9-x-on-red-hat-openshift/
 
-export RBENV_ROOT="${OPENSHIFT_DATA_DIR}.rbenv"
-export RBENV_INIT="${OPENSHIFT_DATA_DIR}.bash_profile_ext"
+export RVM_ROOT="${OPENSHIFT_DATA_DIR}.rvm"
+export RVM_INIT="${OPENSHIFT_DATA_DIR}.rvm/scripts/rvm"
 export RUBY_VERSION="2.0.0-p0"
 
 export TMOUT=5000
 
-if [ ! -d "${RBENV_ROOT}" ] ; then
+if [ ! -d "${RVM_ROOT}" ] ; then
 
-    curl https://raw.github.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash
+    curl -L https://raw.github.com/xiy/rvm-openshift/master/binscripts/install-rvm-openshift.sh | bash -s
 
-    echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_DATA_DIR}.gemrc
+ #    echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_DATA_DIR}.gemrc
 
-	# Build the env-variable
-	echo -n "${OPENSHIFT_DATA_DIR}.rbenv" > ~/.env/user_vars/RBENV_ROOT
+	# # Build the env-variable
+	# echo -n "${OPENSHIFT_DATA_DIR}.rbenv" > ~/.env/user_vars/RVM_ROOT
 
-    export CONFIGURE_OPTS="--disable-install-doc"
-    echo -n "--disable-install-doc" > ~/.env/user_vars/CONFIGURE_OPTS
+ #    export CONFIGURE_OPTS="--disable-install-doc"
+ #    echo -n "--disable-install-doc" > ~/.env/user_vars/CONFIGURE_OPTS
 
-	export RBENV_VERSION="RUBY_VERSION"
-	echo -n "RUBY_VERSION" > ~/.env/user_vars/RBENV_VERSION
-
-    echo '
-export PATH="${RBENV_ROOT}/bin:${PATH}"
-eval "$(rbenv init -)"
-
-alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
-    ' > $RBENV_INIT
+	# export RBENV_VERSION="RUBY_VERSION"
+	# echo -n "RUBY_VERSION" > ~/.env/user_vars/RBENV_VERSION
 
     # These probably arent both necessary, but...
     # We'll see if we need them at all with 'rbenv global..'
@@ -39,11 +30,11 @@ alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
     # echo ${RUBY_VERSION} > ${OPENSHIFT_DATA_DIR}.ruby-version
 
     # Keep this shell working
-    source $RBENV_INIT
+    source $RVM_INIT
     # Add into runtime shells
-    echo "source $RBENV_INIT" >> "${OPENSHIFT_REPO_DIR}/.openshift/action_hooks/pre_start"
+    echo "source $RVM_INIT" >> "${OPENSHIFT_REPO_DIR}/.openshift/action_hooks/pre_start"
     # Make a sort of shortcut
-    echo "source $RBENV_INIT" > ~/.env/user_vars/rinit
+    echo "source $RVM_INIT" > ~/.env/user_vars/rvminit
     # Call it with just:
     # > $rinit
 
@@ -54,12 +45,13 @@ alias gem="gem --config-file ${OPENSHIFT_DATA_DIR}.gemrc"
 
     echo ========= starting ruby install ========== >  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
     echo "=== ( this is coffee break territory) ====" >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
-    tmux new-session -d -s install "rbenv install $RUBY_VERSION >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; echo done. >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; killall tail"
+    tmux new-session -d -s install "rbenv install -v $RUBY_VERSION >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; echo done. >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; killall tail"
     tail -f "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 
     echo ========= setting version ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
     rbenv global $RUBY_VERSION | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 
+    echo Ruby version at $(ruby --version)
     # Duh. Can't install bundler until you've initialized renv in the shell, or it
     # just installs it to the system folder.
     # echo ========= starting bundler install ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"

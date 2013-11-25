@@ -17,7 +17,7 @@ if [ ! -d "${rvm_path}" ] ; then
 
     echo progress-bar >> "${OPENSHIFT_DATA_DIR}.curlrc"
     # curl -L https://raw.github.com/xiy/rvm-openshift/master/binscripts/install-rvm-openshift.sh | bash -s
-    HOME="${OPENSHIFT_DATA_DIR}"; curl -L https://get.rvm.io | bash --rails
+    HOME="${OPENSHIFT_DATA_DIR}"; curl -L https://get.rvm.io | bash -s --rails
 
     # echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_DATA_DIR}.gemrc
     # echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_REPO_DIR}.gemrc

@@ -110,6 +110,7 @@ cd discourse
 git remote add upstream -m master git@github.com:NeilBryant/discourse-quickstart-neb.git
 git pull -s recursive -X theirs upstream master
 git rm 1.install-rbenv
+git rm README.md
 git commit -a -m "Removed rbenv"
 git commit -a -m "Added production.rb"
 git push

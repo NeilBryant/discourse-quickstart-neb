@@ -13,7 +13,8 @@ if [ ! -d "${RVM_ROOT}" ] ; then
 
     curl -L https://raw.github.com/xiy/rvm-openshift/master/binscripts/install-rvm-openshift.sh | bash -s
 
- #    echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_DATA_DIR}.gemrc
+    echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_DATA_DIR}.gemrc
+    echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_REPO_DIR}.gemrc
 
 	# # Build the env-variable
 	# echo -n "${OPENSHIFT_DATA_DIR}.rbenv" > ~/.env/user_vars/RVM_ROOT
@@ -43,13 +44,13 @@ if [ ! -d "${RVM_ROOT}" ] ; then
 
     # gem install bundler
 
-    echo ========= starting ruby install ========== >  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
-    echo "=== ( this is coffee break territory) ====" >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
-    tmux new-session -d -s install "rbenv install -v $RUBY_VERSION >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; echo done. >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; killall tail"
-    tail -f "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    # echo ========= starting ruby install ========== >  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    # echo "=== ( this is coffee break territory) ====" >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    # tmux new-session -d -s install "rbenv install -v $RUBY_VERSION >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; echo done. >> \"${OPENSHIFT_DATA_DIR}rubyinstall.txt\" ; killall tail"
+    # tail -f "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 
-    echo ========= setting version ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
-    rbenv global $RUBY_VERSION | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    # echo ========= setting version ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+    # rbenv global $RUBY_VERSION | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
 
     echo Ruby version at $(ruby --version)
     # Duh. Can't install bundler until you've initialized renv in the shell, or it
@@ -61,21 +62,21 @@ fi
 
 # bluepill_root   = ENV['BLUEPILL_ROOT']  || ENV["HOME"]
     export BLUEPILL_ROOT="${OPENSHIFT_DATA_DIR}"
-    echo -n "${OPENSHIFT_DATA_DIR}" > ~/.env/user_vars/BLUEPILL_ROOT
+    echo -n "${OPENSHIFT_DATA_DIR}" > ~/.env/user_vars/$BLUEPILL_ROOT
 
 # rails_env   = ENV['RAILS_ENV']  || "production"
     export RAILS_ENV="\#"
-    echo -n "\#" > ~/.env/user_vars/RAILS_ENV
+    echo -n "\#" > ~/.env/user_vars/$RAILS_ENV
 
 # rails_root  = ENV['RAILS_ROOT'] || "/var/rails/my_discourse"
     export RAILS_ROOT="\#"
-    echo -n "\#" > ~/.env/user_vars/RAILS_ROOT
+    echo -n "\#" > ~/.env/user_vars/$RAILS_ROOT
 
 
 # user = ENV["DISCOURSE_USER"] || ENV['USER'] || 'user_running_app'
     export DISCOURSE_USER="${OPENSHIFT_APP_UUID}"
-    echo -n "${OPENSHIFT_APP_UUID}" > ~/.env/user_vars/DISCOURSE_USER
+    echo -n "${OPENSHIFT_APP_UUID}" > ~/.env/user_vars/$DISCOURSE_USER
 
 # group = ENV["DISCOURSE_GROUP"] || ENV['GROUP'] || 'www-data'
     export DISCOURSE_GROUP="${OPENSHIFT_APP_UUID}"
-    echo -n "${OPENSHIFT_APP_UUID}" > ~/.env/user_vars/DISCOURSE_GROUP
+    echo -n "${OPENSHIFT_APP_UUID}" > ~/.env/user_vars/$DISCOURSE_GROUP

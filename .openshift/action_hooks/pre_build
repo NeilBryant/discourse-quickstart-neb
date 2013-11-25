@@ -23,10 +23,22 @@ if [ -f "${OPENSHIFT_REPO_DIR}/1.install-rvm" ]; then
 fi
 
 pushd "$OPENSHIFT_REPO_DIR" > /dev/null
-echo "Create config files..."
-cp config/redis.yml.openshift config/redis.yml
-cp config/database.yml.openshift config/database.yml
-cp config/environments/production.rb.openshift config/environments/production.rb
+
+if [ ! -f config/redis.yml ]; then
+	echo "Creatin redis.yml file..."
+	cp config/redis.yml.openshift config/redis.yml
+fi
+
+if [ ! -f config/database.yml ]; then
+	echo "Creatin database.yml file..."
+	cp config/database.yml.openshift config/database.yml
+fi
+
+if [ ! -f config/environments/production.rb ]; then
+	echo "Creatin production.rb file..."
+	cp config/environments/production.rb.openshift config/environments/production.rb
+fi
+
 popd > /dev/null
 
 echo Ended $( basename "$0" ) action hook.

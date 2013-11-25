@@ -8,13 +8,8 @@ echo Starting $( basename "$0" ) action hook...
 set -x
 
 ## If we're using rbenv:
-if [ -f "${OPENSHIFT_REPO_DIR}/1.install-rbenv" ]; then
-	# this will spawn a sub-shell, so make sure we can use rvm
+if [ -d "$OPENSHIFT_DATA_DIR/.rvm" ]; then
 	source $OPENSHIFT_DATA_DIR/.rvm/scripts/rvm
-
-	# make sure our bundle is up to date
-	# cd $OPENSHIFT_REPO_DIR/[appname]
-	# bundle
 fi
 
 

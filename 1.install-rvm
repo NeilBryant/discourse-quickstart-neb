@@ -57,6 +57,16 @@ if [ ! -d "${RVM_ROOT}" ] ; then
     # just installs it to the system folder.
     # echo ========= starting bundler install ========== >>  "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
     # gem install bundler | tee -a "${OPENSHIFT_DATA_DIR}rubyinstall.txt"
+
+    echo "---
+:update_sources: true
+:benchmark: false
+:backtrace: true
+:verbose: true
+gem: --no-ri --no-rdoc
+install: --no-rdoc --no-ri
+update:  --no-rdoc --no-ri" >  /var/lib/openshift/5292d1a9e0b8cd468f000110/app-root/data/.rvm/rubies/default/etc/gemrc
+
 fi
 
 

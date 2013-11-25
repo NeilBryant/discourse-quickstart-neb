@@ -4,6 +4,11 @@ echo Starting $( basename "$0" ) action hook...
 
 set -x
 
+if [ -d "$OPENSHIFT_DATA_DIR/.rvm" ]; then
+  source $OPENSHIFT_DATA_DIR/.rvm/scripts/rvm
+fi
+
+
 pushd ${OPENSHIFT_REPO_DIR} > /dev/null
 SIDEKIQ_PIDFILE="${OPENSHIFT_DATA_DIR}sidekiq.pid"
 

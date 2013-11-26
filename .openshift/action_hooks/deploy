@@ -1,12 +1,16 @@
 #!/bin/bash
 
+set +x
+
 echo Starting $( basename "$0" ) action hook...
 
-set -x
-
 if [ -d "$OPENSHIFT_DATA_DIR/.rvm" ]; then
+  echo Sourcing rvm...
   source $OPENSHIFT_DATA_DIR/.rvm/scripts/rvm
+  echo rvm should be installed.
 fi
+
+set -x
 
 
 pushd ${OPENSHIFT_REPO_DIR} > /dev/null

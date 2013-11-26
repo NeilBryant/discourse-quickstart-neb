@@ -8,6 +8,9 @@ set -x
 export rvm_prefix="${OPENSHIFT_DATA_DIR}"
 export rvm_path="${OPENSHIFT_DATA_DIR}.rvm"
 
+echo "${rvm_prefix}" > ~/.env/user_vars/rvm_prefix
+echo "${rvm_path}" > ~/.env/user_vars/rvm_path
+
 export RVM_INIT="${OPENSHIFT_DATA_DIR}.rvm/scripts/rvm"
 export RUBY_VERSION="2.0.0-p0"
 
@@ -15,9 +18,34 @@ export TMOUT=5000
 
 if [ ! -d "${rvm_path}" ] ; then
 
+    #########################
+    # https://github.com/xiy/rvm-openshift/blob/master/binscripts/install-rvm-openshift.sh
+
+    libyaml_package="yaml-0.1.4"
+    libyaml_url="http://pyyaml.org/download/libyaml/${libyaml_package}.tar.gz"
+
+    if [[ ! ${pwd} == ${OPENSHIFT_DATA_DIR} ]]; then
+      cd ${OPENSHIFT_DATA_DIR}
+    fi
+
+    echo "Getting ${libyaml_url}..."
+    wget ${libyaml_url}
+    tar zxvf ${libyaml_package}.tar.gz
+    cd ${libyaml_package}
+
+    if [ ! -d "${OPENSHIFT_DATA_DIR}/.rvm/usr" ]; then
+      mkdir ${OPENSHIFT_DATA_DIR}/.rvm/usr
+    fi
+
+    echo "Building ${libyaml_package}..."
+    ./configure --prefix=${OPENSHIFT_DATA_DIR}/.rvm/usr
+
+    make && make install
+    #########################
+
     echo progress-bar >> "${OPENSHIFT_DATA_DIR}.curlrc"
     # curl -L https://raw.github.com/xiy/rvm-openshift/master/binscripts/install-rvm-openshift.sh | bash -s
-    HOME="${OPENSHIFT_DATA_DIR}"; curl -L https://get.rvm.io | bash -s --rails
+    HOME="${OPENSHIFT_DATA_DIR}"; curl -L https://get.rvm.io | bash -s master --ruby
 
     # echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_DATA_DIR}.gemrc
     # echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_REPO_DIR}.gemrc
@@ -47,9 +75,6 @@ if [ ! -d "${rvm_path}" ] ; then
 
     # rbenv install $RUBY_VERSION
     # rbenv global $RUBY_VERSION
-
-    echo "${rvm_prefix}" > ~/.env/user_vars/rvm_prefix
-    echo "${rvm_path}" > ~/.env/user_vars/rvm_path
 
     # gem install bundler
 

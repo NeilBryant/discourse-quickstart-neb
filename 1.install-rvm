@@ -14,7 +14,7 @@ echo "${rvm_path}" > ~/.env/user_vars/rvm_path
 export RVM_INIT="${OPENSHIFT_DATA_DIR}.rvm/scripts/rvm"
 export RUBY_VERSION="2.0.0-p0"
 
-export TMOUT=5000
+export TMOUT=6000
 
 if [ ! -d "${rvm_path}" ] ; then
 
@@ -44,8 +44,9 @@ if [ ! -d "${rvm_path}" ] ; then
     #########################
 
     # curl -L https://raw.github.com/xiy/rvm-openshift/master/binscripts/install-rvm-openshift.sh | bash -s
-    HOME="${OPENSHIFT_DATA_DIR}"; curl -L https://get.rvm.io | bash -s master 
-
+    ( set +x
+        HOME="${OPENSHIFT_DATA_DIR}"; curl -L https://get.rvm.io | bash -s master 
+    )
     # echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_DATA_DIR}.gemrc
     # echo "gem: --no-rdoc --no-ri" > ${OPENSHIFT_REPO_DIR}.gemrc
 
